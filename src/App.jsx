@@ -1,6 +1,6 @@
 // App.jsx
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import TodoList from './components/TodoList';
 import AddTodoForm from './components/AddTodoForm';
@@ -9,13 +9,23 @@ function App() {
 	const [todos, setTodos] = useState([]);
 	const [searchTerm, setSearchTerm] = useState('');
 
+	useEffect(() => {
+		const storedTodos = JSON.parse(sessionStorage.getItem('todos'));
+		if (storedTodos && storedTodos.length > 0) {
+			setTodos(storedTodos);
+		}
+	}, []);
 
-	const addTodo = (text,data,time) => {
-		const newTodo = { id: todos.length + 1, text, data,time,completed: false };
+	useEffect(() => {
+		sessionStorage.setItem('todos', JSON.stringify(todos));
+	}, [todos]);
+
+	const addTodo = (text, data, time) => {
+		const newTodo = { id: todos.length + 1, text, data, time, completed: false };
 		setTodos([...todos, newTodo]);
 	};
 
-	const deleteTodo = (id) => {//delete filter
+	const deleteTodo = (id) => {
 		setTodos(todos.filter(todo => todo.id !== id));
 	};
 
@@ -46,10 +56,9 @@ function App() {
 				deleteTodo={deleteTodo}
 				toggleTodoCompletion={toggleTodoCompletion}
 				editTodo={editTodo}
-			/> 
+			/>
 		</div>
 	);
 }
 
 export default App;
-
