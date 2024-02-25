@@ -10,4 +10,4 @@ Currently, two official plugins are available:
 
 https://www.prisma.io/docs/orm/overview/databases/mysql
 https://www.prisma.io/
-npm install redux react-redux
+npm install @reduxjs/toolkit
