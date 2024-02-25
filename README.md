@@ -1,4 +1,4 @@
-# React + Vite
+# React + Viten + prisma +redux
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
@@ -10,3 +10,4 @@ Currently, two official plugins are available:
 
 https://www.prisma.io/docs/orm/overview/databases/mysql
 https://www.prisma.io/
+npm install redux react-redux
