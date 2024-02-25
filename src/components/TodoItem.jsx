@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-
 function TodoItem({ todo, deleteTodo, toggleTodoCompletion, editTodo }) {
+    // console.log(todo.date,"22222")
     const [editing, setEditing] = useState(false);
     const [text, setText] = useState(todo.text);
     const [date, setDate] = useState(todo.date || '');
@@ -19,8 +19,9 @@ function TodoItem({ todo, deleteTodo, toggleTodoCompletion, editTodo }) {
     };
 
     const handleSaveEdit = () => {
-        editTodo(todo.id, text);
+        editTodo(todo.id, text,date,time);
         setEditing(false);
+        console.log("Date:", date)
     };
 
     return (

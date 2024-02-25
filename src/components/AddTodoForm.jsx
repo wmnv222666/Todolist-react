@@ -1,19 +1,25 @@
 // AddTodoForm.jsx
 
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 
 function AddTodoForm({ addTodo }) {
     const [text, setText] = useState('');
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
 
+    useEffect(() => {
+        console.log(date, "Updated Date");
+    }, [date]);
+
     const handleSubmit = (e) => {
+        // console.log(e)
         e.preventDefault();
-        if (!text.trim() || !date || !time) return;
+        if (!text.trim() || (!date.trim) || (!time.trim)) return;
         addTodo(text, date, time);
         setText('');
         setDate('');
         setTime('');
+        console.log("Submitted Date:", date);
     };
 
     return (

@@ -18,11 +18,13 @@ function App() {
 
 	useEffect(() => {
 		sessionStorage.setItem('todos', JSON.stringify(todos));
-	}, [todos]);
+	}, [todos]); 
 
-	const addTodo = (text, data, time) => {
-		const newTodo = { id: todos.length + 1, text, data, time, completed: false };
+	const addTodo = (text, date, time) => {
+		const newTodo = { id: todos.length + 1, text, date, time, completed: false };
+		console.log(newTodo,"a")
 		setTodos([...todos, newTodo]);
+		console.log(newTodo, "b")
 	};
 
 	const deleteTodo = (id) => {
@@ -33,8 +35,8 @@ function App() {
 		setTodos(todos.map(todo => todo.id === id ? { ...todo, completed: !todo.completed } : todo));
 	};
 
-	const editTodo = (id, newText) => {
-		setTodos(todos.map(todo => todo.id === id ? { ...todo, text: newText } : todo));
+	const editTodo = (id, newText, newDate, newTime) => {
+		setTodos(todos.map(todo => todo.id === id ? { ...todo, text: newText, date: newDate, time: newTime } : todo));
 	};
 
 	const filteredTodos = todos.filter(todo =>
