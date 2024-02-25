@@ -3,8 +3,8 @@ import './App.css';
 import TodoList from './components/TodoList';
 import AddTodoForm from './components/AddTodoForm';
 import { addTask, deleteTask, editTask, getTasks, toggleTaskCompletion } from '../utils/db';
-// import { useSelector, useDispatch } from '../redux';
-// import { fetchTodos } from '../redux';
+// import { useSelector, useDispatch } from './store';
+// import { fetchTodos } from './store';
 
 function App() {
 	const [todos, setTodos] = useState([]);
