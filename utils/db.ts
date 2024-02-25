@@ -1,8 +1,37 @@
-'use server'
+// 'use server'
 
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
+// async function main() {
+//     const newTask = await prisma.todo.create({
+//                 data: {
+//                     text:"Javascript",
+//                     date:"2024-02-25",
+//                     time:"3:45",
+//                     completed: false,
+//                 },
+//             });
+//     // console.log(newTask,"newTask")
+
+//     const tasks = await prisma.todo.findMany();
+//     console.log(tasks)
+//     return tasks;
+
+// }
+
+// main()
+//     .then(async () => {
+//         await prisma.$disconnect();
+//     })
+//     .catch(async (e) => {
+//         console.log(e)
+//         await prisma.$disconnect();
+//         process.exit(1);
+//     });
+
+
+
 
 // 添加任务
 export async function addTask(text: string, date: Date, time: Date) {
@@ -32,7 +61,7 @@ export async function deleteTask(id: number) {
     }
 }
 
-// 编辑任务
+// // 编辑任务
 export async function editTask(id: number, newText: string, newDate: Date, newTime: Date) {
     try {
         const updatedTask = await prisma.todo.update({
@@ -49,7 +78,7 @@ export async function editTask(id: number, newText: string, newDate: Date, newTi
     }
 }
 
-// 更新任务完成状态
+// // 更新任务完成状态
 export async function toggleTaskCompletion(id: number) {
     try {
         const task = await prisma.todo.findUnique({
@@ -70,7 +99,7 @@ export async function toggleTaskCompletion(id: number) {
     }
 }
 
-// 获取所有任务
+// // 获取所有任务
 export async function getTasks() {
     try {
         const tasks = await prisma.todo.findMany();
@@ -84,3 +113,5 @@ export async function getTasks() {
 export async function disconnect() {
     await prisma.$disconnect();
 }
+
+

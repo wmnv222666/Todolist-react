@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import TodoList from './components/TodoList';
 import AddTodoForm from './components/AddTodoForm';
-import { addTask, deleteTask, editTask, getTasks, toggleTaskCompletion } from '../utils/db';
+import { addTask, deleteTask, editTask, getTasks, toggleTaskCompletion, disconnect } from '../utils/db';
 
 function App() {
 	const [todos, setTodos] = useState([]);
@@ -14,6 +14,10 @@ function App() {
 			setTodos(tasks);
 		};
 		getAllTasksFromDB();
+
+		return () => {
+			disconnect();
+		};
 	}, []);
 
 	const addTodo = async (text, date, time) => {
