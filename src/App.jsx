@@ -1,42 +1,45 @@
-// App.jsx
-
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import TodoList from './components/TodoList';
 import AddTodoForm from './components/AddTodoForm';
+import { addTask, deleteTask, editTask, getTasks, toggleTaskCompletion } from '../utils/db';
 
 function App() {
 	const [todos, setTodos] = useState([]);
 	const [searchTerm, setSearchTerm] = useState('');
 
 	useEffect(() => {
-		const storedTodos = JSON.parse(sessionStorage.getItem('todos'));
-		if (storedTodos && storedTodos.length > 0) {
-			setTodos(storedTodos);
-		}
+		const getAllTasksFromDB = async () => {
+			const tasks = await getTasks(); // 从数据库获取所有任务
+			setTodos(tasks);
+		};
+		getAllTasksFromDB();
 	}, []);
 
-	useEffect(() => {
-		sessionStorage.setItem('todos', JSON.stringify(todos));
-	}, [todos]); 
-
-	const addTodo = (text, date, time) => {
-		const newTodo = { id: todos.length + 1, text, date, time, completed: false };
-		console.log(newTodo,"a")
-		setTodos([...todos, newTodo]);
-		console.log(newTodo, "b")
+	const addTodo = async (text, date, time) => {
+		// 向数据库添加新任务
+		await addTask(text, date, time);
+		const updatedTasks = await getTasks(); // 从数据库获取更新后的任务列表
+		setTodos(updatedTasks);
 	};
 
-	const deleteTodo = (id) => {
-		setTodos(todos.filter(todo => todo.id !== id));
+	const deleteTodo = async (id) => {
+		await deleteTask(id); // 从数据库删除任务
+		const updatedTasks = await getTasks(); // 从数据库获取更新后的任务列表
+		setTodos(updatedTasks);
 	};
 
-	const toggleTodoCompletion = (id) => {
-		setTodos(todos.map(todo => todo.id === id ? { ...todo, completed: !todo.completed } : todo));
+	const toggleTodoCompletion = async (id) => {
+		await toggleTaskCompletion(id); // 切换任务完成状态
+		const updatedTasks = await getTasks(); // 从数据库获取更新后的任务列表
+		setTodos(updatedTasks);
 	};
 
-	const editTodo = (id, newText, newDate, newTime) => {
-		setTodos(todos.map(todo => todo.id === id ? { ...todo, text: newText, date: newDate, time: newTime } : todo));
+	const editTodo = async (id, newText, newDate, newTime) => {
+		// 更新任务文本、日期和时间
+		await editTask(id, newText, newDate, newTime);
+		const updatedTasks = await getTasks(); // 从数据库获取更新后的任务列表
+		setTodos(updatedTasks);
 	};
 
 	const filteredTodos = todos.filter(todo =>
