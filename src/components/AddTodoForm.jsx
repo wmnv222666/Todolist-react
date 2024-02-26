@@ -1,6 +1,7 @@
 // AddTodoForm.jsx
 
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { addTask } from '../../utils/db'
 
 function AddTodoForm({ addTodo }) {
     const [text, setText] = useState('');
@@ -15,7 +16,7 @@ function AddTodoForm({ addTodo }) {
         // console.log(e)
         e.preventDefault();
         if (!text.trim() || (!date.trim) || (!time.trim)) return;
-        addTodo(text, date, time);
+        addTask(text, date, time);
         setText('');
         setDate('');
         setTime('');

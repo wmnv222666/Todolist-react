@@ -1,54 +1,48 @@
-import { createAsyncThunk } from '@reduxjs/toolkit'; // 导入createAsyncThunk
-import { addTask, deleteTask, editTask, getTasks, toggleTaskCompletion } from '../../utils/db'; // 导入Prisma的数据库操作函数
-// import { setTodos } from './reducers/todoReducer'; // 导入设置Todo状态的action creator
+import { getTasks, addTask, deleteTask, editTask, toggleTaskCompletion } from '../../../utils/db';
 
-// 使用createAsyncThunk创建异步action creator，用于从Prisma中获取Todo列表并将其设置到Redux store中
-export const fetchTodos = createAsyncThunk('todos/fetchTodos', async () => {
-    try {
-        const tasks = await getTasks(); // 从Prisma获取Todo列表
-        return tasks; // 返回获取的Todo列表
-    } catch (error) {
-        throw error; // 抛出错误
-    }
-});
+export const FETCH_TODOS = 'FETCH_TODOS';
 
-// 使用createAsyncThunk创建异步action creator，用于向Prisma中添加Todo并更新Redux store中的状态
-export const addTodo = createAsyncThunk('todos/addTodo', async (todoData) => {
+export const fetchTodos = () => async (dispatch) => {
     try {
-        const { text, date, time } = todoData;
-        const newTask = await addTask(text, date, time); // 向Prisma添加Todo
-        return newTask; // 返回新添加的Todo
+        const todos = await getTasks();
+        dispatch({ type: FETCH_TODOS, payload: todos });
     } catch (error) {
-        throw error; // 抛出错误
+        console.error('Error fetching todos:', error);
     }
-});
+};
 
-// 使用createAsyncThunk创建异步action creator，用于从Prisma中删除Todo并更新Redux store中的状态
-export const removeTodo = createAsyncThunk('todos/removeTodo', async (id) => {
+export const addTodo = (text, date, time) => async (dispatch) => {
     try {
-        await deleteTask(id); // 从Prisma删除Todo
-        return id; // 返回被删除的Todo的ID
+        await addTask(text, date, time);
+        dispatch(fetchTodos());
     } catch (error) {
-        throw error; // 抛出错误
+        console.error('Error adding todo:', error);
     }
-});
+};
 
-// 使用createAsyncThunk创建异步action creator，用于更新Prisma中的Todo并更新Redux store中的状态
-export const updateTodo = createAsyncThunk('todos/updateTodo', async ({ id, newText, newDate, newTime }) => {
+export const removeTodo = (id) => async (dispatch) => {
     try {
-        const updatedTask = await editTask(id, newText, newDate, newTime); // 更新Prisma中的Todo
-        return updatedTask; // 返回更新后的Todo
+        await deleteTask(id);
+        dispatch(fetchTodos());
     } catch (error) {
-        throw error; // 抛出错误
+        console.error('Error removing todo:', error);
     }
-});
+};
 
-// 使用createAsyncThunk创建异步action creator，用于切换Prisma中的Todo完成状态并更新Redux store中的状态
-export const toggleTodoCompletion = createAsyncThunk('todos/toggleTodoCompletion', async (id) => {
+export const toggleTodo = (id) => async (dispatch) => {
     try {
-        const updatedTask = await toggleTaskCompletion(id); // 切换Prisma中的Todo完成状态
-        return updatedTask; // 返回更新后的Todo
+        await toggleTaskCompletion(id);
+        dispatch(fetchTodos());
     } catch (error) {
-        throw error; // 抛出错误
+        console.error('Error toggling todo:', error);
     }
-});
+};
+
+export const updateTodo = (id, newText, newDate, newTime) => async (dispatch) => {
+    try {
+        await editTask(id, newText, newDate, newTime);
+        dispatch(fetchTodos());
+    } catch (error) {
+        console.error('Error updating todo:', error);
+    }
+};
